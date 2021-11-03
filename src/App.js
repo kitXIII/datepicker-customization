@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import MomentUtils from "@date-io/moment";
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import { ListItem } from "@material-ui/core";
 
-function App() {
+const KeyboardInputProps = {
+  disableUnderline: true,
+  fullWidth: true,
+};
+const KeyboardButtonProps = { size: "small" };
+
+export const App = () => {
+  const [selectedDate, handleDateChange] = useState(new Date());
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
+      <ListItem divider>
+        <KeyboardDatePicker
+          fullWidth
+          clearable
+          autoOk
+          value={selectedDate}
+          onChange={handleDateChange}
+          InputProps={KeyboardInputProps}
+          KeyboardButtonProps={KeyboardButtonProps}
+        />
+      </ListItem>
+    </MuiPickersUtilsProvider>
   );
-}
-
-export default App;
+};
