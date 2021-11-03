@@ -5,7 +5,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import { ListItem, Typography } from "@material-ui/core";
-
+import { CustomDatePickerToolbar } from "./CustomDatePickerToolbar";
 
 const KeyboardInputProps = {
   disableUnderline: true,
@@ -13,7 +13,11 @@ const KeyboardInputProps = {
 };
 const KeyboardButtonProps = { size: "small" };
 
-const Message = () => <div style={{ padding: '0 20px 10px', order: 2}}><Typography>Hello world!</Typography></div>;
+const Message = () => <Typography>Hello world!</Typography>;
+
+const CustomDatePickerToolbarWithMessage = (props) => (
+  <CustomDatePickerToolbar Message={Message} {...props} />
+);
 
 export const App = () => {
   const [selectedDate, handleDateChange] = useState(new Date());
@@ -29,15 +33,13 @@ export const App = () => {
         }}
       >
         <ListItem divider>
+          <Typography>Standard calendar</Typography>
+        </ListItem>
+        <ListItem divider>
           <Typography>
-            Standard calendar
+            Use custom component instead datepicker heading
           </Typography>
         </ListItem>
-          <ListItem divider>
-            <Typography>
-              Use custom component instead datepicker heading
-            </Typography>
-          </ListItem>
         <ListItem divider>
           <KeyboardDatePicker
             fullWidth
@@ -52,16 +54,14 @@ export const App = () => {
         </ListItem>
         <ListItem divider>
           <KeyboardDatePicker
-            className=''
             fullWidth
             clearable
-            autoOk
             format="DD/MM/YYYY"
             value={selectedDate}
             onChange={handleDateChange}
             InputProps={KeyboardInputProps}
             KeyboardButtonProps={KeyboardButtonProps}
-            ToolbarComponent={Message}
+            ToolbarComponent={CustomDatePickerToolbarWithMessage}
           />
         </ListItem>
       </div>
