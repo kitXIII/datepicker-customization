@@ -1,26 +1,32 @@
-import React, { useState } from "react";
+import { useState, useRef } from "react";
 import MomentUtils from "@date-io/moment";
+import { DateType } from "@date-io/type";
+import moment from "moment";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
+import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
 import { ListItem, Typography } from "@material-ui/core";
+import { IconButtonProps } from "@material-ui/core/IconButton";
+import { InputProps } from "@material-ui/core/Input/Input";
 import { CustomDatePickerToolbar } from "./CustomDatePickerToolbar";
 
-const KeyboardInputProps = {
+const KeyboardInputProps: Partial<InputProps> = {
   disableUnderline: true,
   fullWidth: true,
 };
-const KeyboardButtonProps = { size: "small" };
+const KeyboardButtonProps: Partial<IconButtonProps> = { size: "small" };
 
 const Message = () => <Typography>Hello world!</Typography>;
 
-const CustomDatePickerToolbarWithMessage = (props) => (
+const CustomDatePickerToolbarWithMessage = (props: ToolbarComponentProps) => (
   <CustomDatePickerToolbar Message={Message} {...props} />
 );
 
 export const App = () => {
-  const [selectedDate, handleDateChange] = useState(new Date());
+  const [selectedDate, handleDateChange] = useState<DateType | null>(moment());
+  const anchorRef = useRef<HTMLLIElement>(null);
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -43,7 +49,6 @@ export const App = () => {
         <ListItem divider>
           <KeyboardDatePicker
             fullWidth
-            clearable
             autoOk
             format="DD/MM/YYYY"
             value={selectedDate}
@@ -52,16 +57,24 @@ export const App = () => {
             KeyboardButtonProps={KeyboardButtonProps}
           />
         </ListItem>
-        <ListItem divider>
+        <ListItem divider ref={anchorRef}>
           <KeyboardDatePicker
             fullWidth
-            clearable
+            variant="inline"
             format="DD/MM/YYYY"
+            views={["year", "month", "date"]}
             value={selectedDate}
             onChange={handleDateChange}
             InputProps={KeyboardInputProps}
             KeyboardButtonProps={KeyboardButtonProps}
             ToolbarComponent={CustomDatePickerToolbarWithMessage}
+            PopoverProps={{
+              anchorEl: () => anchorRef.current as Element,
+              anchorOrigin: {
+                vertical: 70,
+                horizontal: 'center'
+              }
+            }}
           />
         </ListItem>
       </div>
