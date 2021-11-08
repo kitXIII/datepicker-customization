@@ -7,16 +7,22 @@ import { makeStyles } from "@material-ui/core/styles";
 export const useStyles = makeStyles(
   {
     toolbar: {
+      boxSizing: "border-box",
+      width: "310px",
       display: "flex",
       flexDirection: "column",
       alignItems: "flex-start",
     },
     actions: {
+      boxSizing: "border-box",
+      maxWidth: "100%",
       display: "flex",
+      flexWrap: "nowrap",
+      overflow: "auto",
       padding: "10px",
-      justifyContent: "space-between",
     },
     action: {
+      flexShrink: 0,
       marginRight: "10px",
     },
     message: { padding: "10px" },
@@ -44,7 +50,7 @@ export const CustomDatePickerToolbar: FC<
           className={classes.action}
           onClick={() => setOpenView("year")}
         >
-          <Typography variant="h5" component="span">
+          <Typography variant="h4" component="span">
             {date ? utils.getYearText(date) : "Year"}
           </Typography>
         </Button>
@@ -54,7 +60,7 @@ export const CustomDatePickerToolbar: FC<
           className={classes.action}
           onClick={() => setOpenView("month")}
         >
-          <Typography variant="h5" component="span">
+          <Typography variant="h4" component="span">
             {date ? utils.getMonthText(date) : "Month"}
           </Typography>
         </Button>
