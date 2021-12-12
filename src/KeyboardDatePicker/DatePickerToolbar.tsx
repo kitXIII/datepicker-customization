@@ -1,38 +1,18 @@
 import { FC } from "react";
 import { useUtils } from "@material-ui/pickers";
 import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { DatePickerButton } from "./DatePickerButton";
 
-const useStyles = makeStyles(
-  {
-    toolbar: {
-      boxSizing: "border-box",
-      width: "310px",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-    },
-    actions: {
-      boxSizing: "border-box",
-      maxWidth: "100%",
-      display: "flex",
-      flexWrap: "nowrap",
-      overflow: "auto",
-      padding: "10px",
-    },
-    action: {
-      flexShrink: 0,
-      marginRight: "10px",
-    },
-    message: { padding: "10px" },
-  },
-  { name: "MuiPickersDatePickerRoot" }
-);
+type DatePickerToolbarProps = ToolbarComponentProps & { message?: string };
 
-export const DatePickerToolbar: FC<
-  ToolbarComponentProps & { message?: string }
-> = ({ date, setOpenView, message, openView }) => {
+export const DatePickerToolbar: FC<DatePickerToolbarProps> = ({
+  date,
+  setOpenView,
+  message,
+  openView,
+}) => {
   const utils = useUtils();
   const classes = useStyles();
 
@@ -40,31 +20,58 @@ export const DatePickerToolbar: FC<
     <div className={classes.toolbar}>
       {message ? (
         <div className={classes.message}>
-          <Typography>{message}</Typography>
+          <Typography variant="body2">{message}</Typography>
         </div>
       ) : null}
       <div className={classes.actions}>
-        <Button
-          color="primary"
-          variant="text"
+        <DatePickerButton
           className={classes.action}
           onClick={() => setOpenView("year")}
         >
-          <Typography variant="h4" component="span">
-            {date ? utils.getYearText(date) : "Year"}
-          </Typography>
-        </Button>
-        <Button
-          color="primary"
-          variant="text"
+          {date ? utils.getYearText(date) : "Year"}
+        </DatePickerButton>
+        <DatePickerButton
           className={classes.action}
           onClick={() => setOpenView("month")}
         >
-          <Typography variant="h4" component="span">
-            {date ? utils.getMonthText(date) : "Month"}
-          </Typography>
-        </Button>
+          {date ? utils.getMonthText(date) : "Month"}
+        </DatePickerButton>
       </div>
     </div>
   );
 };
+
+const useStyles = makeStyles(
+  {
+    toolbar: {
+      boxSizing: "border-box",
+      width: "312px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      marginBottom: "8px",
+      padding: "8px 8px 0",
+    },
+    message: {
+      padding: "8px",
+      fontSize: "16px",
+      color: "#616569",
+    },
+    actions: {
+      boxSizing: "border-box",
+      width: "100%",
+      paddingTop: "8px",
+      display: "flex",
+      justifyContent: "space-between",
+      overflow: "auto",
+      color: "#3A4CCC",
+    },
+    action: {
+      flexShrink: 0,
+
+      "& + &": {
+        marginLeft: "10px",
+      },
+    },
+  },
+);

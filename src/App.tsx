@@ -10,19 +10,34 @@ export const App = () => {
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
-      <div
-        style={{
-          width: '200px',
-          marginLeft: '500px',
-          outline: '1px solid #000'
-        }}
-      >
-        <KeyboardDatePicker
-          message="Hello world!"
-          value={selectedDate}
-          onChange={handleDateChange}
-          format='YYYY/MM/DD'
-        />
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            width: "200px",
+            marginLeft: "200px",
+            outline: "1px solid #000",
+          }}
+        >
+          <KeyboardDatePicker
+            message="Hello world!"
+            value={selectedDate}
+            onChange={handleDateChange}
+            format="YYYY/MM/DD"
+          />
+        </div>
+        <div
+          style={{
+            width: "312px",
+            outline: "1px solid #000",
+            marginLeft: "20px",
+          }}
+        >
+          <KeyboardDatePicker
+            value={selectedDate}
+            onChange={handleDateChange}
+            format="YYYY/MM/DD"
+          />
+        </div>
       </div>
     </MuiPickersUtilsProvider>
   );
