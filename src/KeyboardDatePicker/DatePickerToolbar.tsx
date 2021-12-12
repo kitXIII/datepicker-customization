@@ -4,7 +4,7 @@ import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
 import { Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-export const useStyles = makeStyles(
+const useStyles = makeStyles(
   {
     toolbar: {
       boxSizing: "border-box",
@@ -30,17 +30,17 @@ export const useStyles = makeStyles(
   { name: "MuiPickersDatePickerRoot" }
 );
 
-export const CustomDatePickerToolbar: FC<
-  ToolbarComponentProps & { Message: FC }
-> = ({ date, setOpenView, Message, openView }) => {
+export const DatePickerToolbar: FC<
+  ToolbarComponentProps & { message?: string }
+> = ({ date, setOpenView, message, openView }) => {
   const utils = useUtils();
   const classes = useStyles();
 
   return (
     <div className={classes.toolbar}>
-      {Message ? (
+      {message ? (
         <div className={classes.message}>
-          <Message />
+          <Typography>{message}</Typography>
         </div>
       ) : null}
       <div className={classes.actions}>
