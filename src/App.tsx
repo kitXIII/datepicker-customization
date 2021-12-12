@@ -1,12 +1,11 @@
 import { useState } from "react";
 import MomentUtils from "@date-io/moment";
 import { DateType } from "@date-io/type";
-import moment from "moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { KeyboardDatePicker } from "./KeyboardDatePicker";
 
 export const App = () => {
-  const [selectedDate, handleDateChange] = useState<DateType | null>(moment());
+  const [selectedDate, handleDateChange] = useState<DateType | null>(null);
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -21,7 +20,6 @@ export const App = () => {
             message="Hello world!"
             value={selectedDate}
             onChange={handleDateChange}
-            format="YYYY/MM/DD"
           />
         </div>
         <div
@@ -33,7 +31,6 @@ export const App = () => {
           <KeyboardDatePicker
             value={selectedDate}
             onChange={handleDateChange}
-            format="YYYY/MM/DD"
           />
         </div>
       </div>
