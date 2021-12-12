@@ -16,6 +16,7 @@ export const DatePickerButton = withStyles((theme) => ({
     fontWeight: 600,
     padding: 0,
     lineHeight: "24px",
-    fontSize: "20px"
+    fontSize: "20px",
+    textTransform: 'capitalize',
   },
 }))((props: ButtonProps) => <Button variant="text" {...props} />);

@@ -15,7 +15,6 @@ export const App = () => {
           style={{
             width: "200px",
             marginLeft: "200px",
-            outline: "1px solid #000",
           }}
         >
           <KeyboardDatePicker
@@ -28,7 +27,6 @@ export const App = () => {
         <div
           style={{
             width: "312px",
-            outline: "1px solid #000",
             marginLeft: "20px",
           }}
         >

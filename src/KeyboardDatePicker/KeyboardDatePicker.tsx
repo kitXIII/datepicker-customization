@@ -15,7 +15,6 @@ const KeyboardInputProps: Partial<InputProps> = {
   fullWidth: true,
 };
 
-
 const PopoverOriginSettings: PopoverOrigin = {
   vertical: -5,
   horizontal: "center",
@@ -61,12 +60,6 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
           className: classes.inputIcon || undefined,
           size: "small",
         }}
-        leftArrowButtonProps={{
-          size: "small",
-        }}
-        rightArrowButtonProps={{
-          size: "small",
-        }}
         ToolbarComponent={ToolbarComponent}
         PopoverProps={{
           className: classes.popover,
@@ -89,12 +82,38 @@ const useStyles = makeStyles({
   },
   popover: {
     "& .MuiPickersCalendarHeader-switchHeader": {
-      padding: '0 12px',
+      padding: "0 12px",
+      marginBottom: "35px",
+
+      "& .MuiIconButton-root": {
+        borderRadius: "4px",
+        width: "32px",
+        height: "32px",
+      },
+      "& .MuiTypography-root": {
+        fontWeight: 600,
+      },
     },
-    "& .MuiPickersCalendarHeader-switchHeader .MuiIconButton-root": {
+
+    "& .MuiPickersDay-day": {
+      margin: 0,
+      width: "40px",
+      height: "40px",
       borderRadius: "4px",
-      width: '32px',
-      height: '32px',
+
+      "&:hover": {
+        backgroundColor: "#E1E4E8",
+      },
     },
+
+    "& .MuiPickersDay-hidden": {
+      opacity: 1,
+      color: "#BDBDBD",
+    },
+
+    "& .MuiPickersCalendar-transitionContainer": {
+      minHeight: '240px',
+      paddingBottom: '12px', 
+    }
   },
 });
