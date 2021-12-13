@@ -1,4 +1,4 @@
-import { useCallback, FC, useRef } from "react";
+import { useCallback, FC, useRef, ReactNode } from "react";
 import {
   DatePickerView,
   KeyboardDatePicker as MUIKeyboardDatePicker,
@@ -13,24 +13,40 @@ import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
 const defaultFormat = "YYYY/MM/DD";
 
 const KeyboardInputProps: Partial<InputProps> = {
-  disableUnderline: true,
   fullWidth: true,
 };
 
 const DatePickerViewOrder: DatePickerView[] = ["year", "month", "date"];
 
+type DateIOType = MaterialUiPickersDate | null;
+
 export type KeyboardDatePickerProps = {
   value: ParsableDate;
-  onChange: (date: MaterialUiPickersDate | null, value?: string | null) => void;
-  format?: string;
+  onChange: (date: DateIOType, value?: string | null) => void;
   message?: string;
+  format?: string;
+  onAccept?: (date: DateIOType) => void;
+  onClose?: () => void;
+  onOpen?: () => void;
+  open?: boolean;
+  disabled?: boolean;
+  disableFuture?: boolean;
+  disablePast?: boolean;
+  shouldDisableDate?: (day: DateIOType) => boolean;
+  invalidDateMessage?: ReactNode;
+  invalidLabel?: string;
+  maxDate?: ParsableDate;
+  maxDateMessage?: ReactNode;
+  minDate?: ParsableDate;
+  minDateMessage?: ReactNode;
+  strictCompareDates?: boolean;
+  readOnly?: boolean;
 };
 
 export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
-  value,
-  onChange,
   format = defaultFormat,
   message,
+  ...restProps
 }) => {
   const ToolbarComponent = useCallback(
     (props: ToolbarComponentProps) => (
@@ -44,12 +60,10 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
   return (
     <div className={classes.container} ref={containerRef}>
       <MUIKeyboardDatePicker
-        fullWidth
-        variant="inline"
+        {...restProps}
         format={format}
+        variant="inline"
         views={DatePickerViewOrder}
-        value={value}
-        onChange={onChange}
         InputProps={KeyboardInputProps}
         KeyboardButtonProps={{
           className: classes.inputIcon || undefined,
@@ -61,7 +75,8 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
           anchorEl: () => containerRef.current as Element,
           elevation: 4,
         }}
-      />
+        fullWidth
+        />
     </div>
   );
 };

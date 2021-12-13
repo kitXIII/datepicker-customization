@@ -5,7 +5,8 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { KeyboardDatePicker } from "./KeyboardDatePicker";
 
 export const App = () => {
-  const [selectedDate, handleDateChange] = useState<DateType | null>(null);
+  const [selectedDate1, handleDateChange1] = useState<DateType | null>(null);
+  const [selectedDate2, handleDateChange2] = useState<DateType | null>(null);
 
   return (
     <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -18,8 +19,8 @@ export const App = () => {
         >
           <KeyboardDatePicker
             message="Hello world!"
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={selectedDate1}
+            onChange={handleDateChange1}
           />
         </div>
         <div
@@ -29,8 +30,8 @@ export const App = () => {
           }}
         >
           <KeyboardDatePicker
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={selectedDate2}
+            onChange={handleDateChange2}
           />
         </div>
       </div>
