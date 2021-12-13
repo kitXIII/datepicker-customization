@@ -4,7 +4,7 @@ import {
   KeyboardDatePicker as MUIKeyboardDatePicker,
 } from "@material-ui/pickers";
 import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Theme } from "@material-ui/core";
 import { InputProps } from "@material-ui/core/Input/Input";
 import { DatePickerToolbar } from "./DatePickerToolbar";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
@@ -76,12 +76,12 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
           elevation: 4,
         }}
         fullWidth
-        />
+      />
     </div>
   );
 };
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   container: {
     width: "100%",
   },
@@ -123,5 +123,34 @@ const useStyles = makeStyles({
       minHeight: "240px",
       paddingBottom: "12px",
     },
+
+    "& .MuiPickersYearSelection-container": {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+
+      "& .MuiPickersYear-root": {
+        margin: "8px 0",
+        padding: "8px 12px",
+        color: theme.palette.text.primary,
+        fontSize: "16px",
+        lineHeight: "16px",
+        fontWeight: 400,
+        borderRadius: "4px",
+
+        "&:hover": {
+          backgroundColor: "#F0F2F3",
+        },
+      },
+
+      "& .MuiPickersYear-yearSelected": {
+        fontSize: "20px",
+        lineHeight: "24px",
+        fontWeight: 600,
+        color: theme.palette.primary.main,
+        margin: "8px 0",
+        padding: "4px 8px",
+      },
+    },
   },
-});
+}));
