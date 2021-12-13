@@ -152,5 +152,42 @@ const useStyles = makeStyles((theme: Theme) => ({
         padding: "4px 8px",
       },
     },
+
+    "& .MuiPickersMonthSelection-container": {
+      width: "100%",
+      padding: '12px 0 24px',
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gridColumnGap: "0px",
+      gridRowGap: "0px",
+      justifyItems: "center",
+
+      "& .MuiPickersMonth-root": {
+        flex: "unset",
+        width: "42px",
+        height: "40px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: "4px",
+
+        color: theme.palette.text.primary,
+        fontSize: "16px",
+        fontWeight: 400,
+
+        "&:hover": {
+          backgroundColor: "#F0F2F3",
+        },
+      },
+
+      "& .MuiPickersMonth-monthSelected": {
+        fontSize: "20px",
+        fontWeight: 600,
+        color: theme.palette.primary.main,
+      },
+    },
+    "& .MuiPickersBasePicker-pickerView": {
+      minHeight: 'unset'
+    }
   },
 }));
