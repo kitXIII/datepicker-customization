@@ -1,10 +1,23 @@
-import { useCallback, FC, useRef, ReactNode } from "react";
+import {
+  useCallback,
+  FC,
+  useRef,
+  ReactNode,
+  ComponentClass,
+  FunctionComponent,
+} from "react";
 import {
   DatePickerView,
   KeyboardDatePicker as MUIKeyboardDatePicker,
 } from "@material-ui/pickers";
 import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
-import { makeStyles, Theme } from "@material-ui/core";
+import {
+  IconButtonProps,
+  InputAdornmentProps,
+  makeStyles,
+  TextFieldProps,
+  Theme,
+} from "@material-ui/core";
 import { InputProps } from "@material-ui/core/Input/Input";
 import { DatePickerToolbar } from "./DatePickerToolbar";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
@@ -41,6 +54,14 @@ export type KeyboardDatePickerProps = {
   minDateMessage?: ReactNode;
   strictCompareDates?: boolean;
   readOnly?: boolean;
+  TextFieldComponent?:
+    | ComponentClass<TextFieldProps, any>
+    | FunctionComponent<TextFieldProps>;
+  InputAdornmentProps?: Partial<InputAdornmentProps>;
+  inputValue?: string;
+  inputVariant?: "standard" | "outlined" | "filled";
+  KeyboardButtonProps?: Partial<IconButtonProps>;
+  KeyboardInputProps?: Partial<InputProps>;
 };
 
 export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
@@ -155,7 +176,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
     "& .MuiPickersMonthSelection-container": {
       width: "100%",
-      padding: '12px 0 24px',
+      padding: "12px 0 24px",
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
       gridColumnGap: "0px",
@@ -187,7 +208,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       },
     },
     "& .MuiPickersBasePicker-pickerView": {
-      minHeight: 'unset'
-    }
+      minHeight: "unset",
+    },
   },
 }));
