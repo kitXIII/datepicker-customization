@@ -2,6 +2,7 @@ import {
   useCallback,
   FC,
   useRef,
+  useMemo,
   ReactNode,
   ComponentClass,
   FunctionComponent,
@@ -15,6 +16,7 @@ import {
   IconButtonProps,
   InputAdornmentProps,
   makeStyles,
+  PopoverOrigin,
   TextFieldProps,
   Theme,
 } from "@material-ui/core";
@@ -22,6 +24,7 @@ import { InputProps } from "@material-ui/core/Input/Input";
 import { DatePickerToolbar } from "./DatePickerToolbar";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
+import { omitBy, isUndefined } from 'lodash';
 
 const defaultFormat = "YYYY/MM/DD";
 
@@ -62,11 +65,15 @@ export type KeyboardDatePickerProps = {
   inputVariant?: "standard" | "outlined" | "filled";
   KeyboardButtonProps?: Partial<IconButtonProps>;
   KeyboardInputProps?: Partial<InputProps>;
+  popoverAnchorOrigin?: PopoverOrigin;
+  popoverTransformOrigin?: PopoverOrigin;
 };
 
 export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
   format = defaultFormat,
   message,
+  popoverAnchorOrigin,
+  popoverTransformOrigin,
   ...restProps
 }) => {
   const ToolbarComponent = useCallback(
@@ -77,6 +84,17 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
   );
   const classes = useStyles();
   const containerRef = useRef<HTMLDivElement>(null);
+  const popoverOriginProps = useMemo(
+    () =>
+      omitBy(
+        {
+          anchorOrigin: popoverAnchorOrigin,
+          transformOrigin: popoverTransformOrigin,
+        },
+        isUndefined
+      ),
+    [popoverAnchorOrigin, popoverTransformOrigin]
+  );
 
   return (
     <div className={classes.container} ref={containerRef}>
@@ -94,7 +112,10 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
         PopoverProps={{
           className: classes.popover,
           anchorEl: () => containerRef.current as Element,
-          elevation: 4,
+          PaperProps: {
+            variant: "outlined",
+          },
+          ...popoverOriginProps,
         }}
         fullWidth
       />
