@@ -3,7 +3,6 @@ import { useUtils } from "@material-ui/pickers";
 import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { DatePickerButton } from "./DatePickerButton";
 
 type DatePickerToolbarProps = ToolbarComponentProps & { message?: string };
 
@@ -24,54 +23,68 @@ export const DatePickerToolbar: FC<DatePickerToolbarProps> = ({
         </div>
       ) : null}
       <div className={classes.actions}>
-        <DatePickerButton
+        <button
           className={classes.action}
           onClick={() => setOpenView("year")}
         >
           {date ? utils.getYearText(date) : "Year"}
-        </DatePickerButton>
-        <DatePickerButton
+        </button>
+        <button
           className={classes.action}
           onClick={() => setOpenView("month")}
         >
           {date ? utils.getMonthText(date) : "Month"}
-        </DatePickerButton>
+        </button>
       </div>
     </div>
   );
 };
 
-const useStyles = makeStyles(
-  {
-    toolbar: {
-      boxSizing: "border-box",
-      width: "312px",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-      marginBottom: "8px",
-      padding: "8px 8px 0",
-    },
-    message: {
-      padding: "8px",
-      fontSize: "16px",
-      color: "#616569",
-    },
-    actions: {
-      boxSizing: "border-box",
-      width: "100%",
-      paddingTop: "8px",
-      display: "flex",
-      justifyContent: "space-between",
-      overflow: "auto",
-      color: "#3A4CCC",
-    },
-    action: {
-      flexShrink: 0,
+const useStyles = makeStyles({
+  toolbar: {
+    boxSizing: "border-box",
+    width: "312px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    marginBottom: "8px",
+    padding: "8px 8px 0",
+  },
+  message: {
+    padding: "8px",
+    fontSize: "16px",
+    color: "#616569",
+  },
+  actions: {
+    boxSizing: "border-box",
+    width: "100%",
+    paddingTop: "8px",
+    display: "flex",
+    justifyContent: "space-between",
+    overflow: "auto",
+  },
+  action: {
+    flexShrink: 0,
+    padding: "12px 8px",
 
-      "& + &": {
-        marginLeft: "10px",
-      },
+    color: "#3A4CCC",
+    backgroundColor: "transparent",
+    "&:hover": {
+      backgroundColor: "#F0F2F3",
+    },
+
+    cursor: 'pointer',
+
+    border: 'none',
+    borderRadius: '4px',
+
+    fontWeight: 600,
+    lineHeight: "24px",
+    fontSize: "20px",
+    textTransform: "capitalize",
+
+    "& + &": {
+      marginLeft: "10px",
     },
   },
-);
+});
