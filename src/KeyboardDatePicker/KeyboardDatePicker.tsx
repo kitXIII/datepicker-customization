@@ -1,36 +1,16 @@
-import {
-  useCallback,
-  FC,
-  useRef,
-  useMemo,
-  ReactNode,
-  ComponentClass,
-  FunctionComponent,
-} from "react";
+import { makeStyles, PopoverOrigin } from "@material-ui/core";
 import {
   DatePickerView,
   KeyboardDatePicker as MUIKeyboardDatePicker,
 } from "@material-ui/pickers";
-import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
-import {
-  IconButtonProps,
-  InputAdornmentProps,
-  makeStyles,
-  PopoverOrigin,
-  TextFieldProps,
-  Theme,
-} from "@material-ui/core";
-import { InputProps } from "@material-ui/core/Input/Input";
-import { DatePickerToolbar } from "./DatePickerToolbar";
-import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
-import { omitBy, isUndefined } from 'lodash';
+import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
+import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
+import { isUndefined, omitBy } from "lodash";
+import React, { FC, ReactNode, useCallback, useMemo, useRef } from "react";
 
-const defaultFormat = "YYYY/MM/DD";
-
-const KeyboardInputProps: Partial<InputProps> = {
-  fullWidth: true,
-};
+import { DatePickerToolbar } from "./DatePickerToolbar";
+import { Color } from "./styles";
 
 const DatePickerViewOrder: DatePickerView[] = ["year", "month", "date"];
 
@@ -45,6 +25,7 @@ export type KeyboardDatePickerProps = {
   onClose?: () => void;
   onOpen?: () => void;
   open?: boolean;
+  autoOk?: boolean;
   disabled?: boolean;
   disableFuture?: boolean;
   disablePast?: boolean;
@@ -57,20 +38,13 @@ export type KeyboardDatePickerProps = {
   minDateMessage?: ReactNode;
   strictCompareDates?: boolean;
   readOnly?: boolean;
-  TextFieldComponent?:
-    | ComponentClass<TextFieldProps, any>
-    | FunctionComponent<TextFieldProps>;
-  InputAdornmentProps?: Partial<InputAdornmentProps>;
   inputValue?: string;
-  inputVariant?: "standard" | "outlined" | "filled";
-  KeyboardButtonProps?: Partial<IconButtonProps>;
-  KeyboardInputProps?: Partial<InputProps>;
   popoverAnchorOrigin?: PopoverOrigin;
   popoverTransformOrigin?: PopoverOrigin;
 };
 
 export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
-  format = defaultFormat,
+  format = "YYYY-MM-DD",
   message,
   popoverAnchorOrigin,
   popoverTransformOrigin,
@@ -82,8 +56,7 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
     ),
     [message]
   );
-  const classes = useStyles();
-  const containerRef = useRef<HTMLDivElement>(null);
+
   const popoverOriginProps = useMemo(
     () =>
       omitBy(
@@ -96,72 +69,145 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
     [popoverAnchorOrigin, popoverTransformOrigin]
   );
 
+  const classes = useStyles();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className={classes.container} ref={containerRef}>
       <MUIKeyboardDatePicker
         {...restProps}
         format={format}
         variant="inline"
+        inputVariant="outlined"
         views={DatePickerViewOrder}
-        InputProps={KeyboardInputProps}
+        InputProps={{
+          fullWidth: true,
+        }}
         KeyboardButtonProps={{
           className: classes.inputIcon || undefined,
           size: "small",
+          disableRipple: true,
         }}
         ToolbarComponent={ToolbarComponent}
+        leftArrowButtonProps={{
+          disableRipple: true,
+        }}
+        rightArrowButtonProps={{
+          disableRipple: true,
+        }}
         PopoverProps={{
           className: classes.popover,
           anchorEl: () => containerRef.current as Element,
           PaperProps: {
-            variant: "outlined",
+            elevation: 0,
+            square: true,
           },
           ...popoverOriginProps,
         }}
-        fullWidth
       />
     </div>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles({
   container: {
     width: "100%",
   },
   inputIcon: {
-    borderRadius: "4px",
+    borderRadius: 0,
   },
   popover: {
-    "& .MuiPickersCalendarHeader-switchHeader": {
-      padding: "0 12px",
-      marginBottom: "35px",
+    "& .MuiPopover-paper": {
+      backgroundColor: Color.white,
+      boxShadow: "0px 4px 24px rgba(0, 0, 0, 0.16)",
+    },
 
-      "& .MuiIconButton-root": {
-        borderRadius: "4px",
-        width: "32px",
+    "& .MuiPickersCalendarHeader": {
+      "&-transitionContainer ": {
         height: "32px",
+        "& > *": {
+          bottom: 0,
+        },
       },
-      "& .MuiTypography-root": {
-        fontWeight: 600,
+
+      "&-switchHeader": {
+        height: "40px",
+        padding: "0 12px",
+        marginBottom: "16px",
+        marginTop: 0,
+
+        "& .MuiIconButton-root": {
+          borderRadius: 0,
+          width: "32px",
+          height: "32px",
+          color: Color.grayDark,
+
+          "&:hover": {
+            backgroundColor: Color.grayLight,
+          },
+        },
+
+        "& .MuiIconButton-root.Mui-disabled": {
+          color: Color.gray4,
+        },
+
+        "& .MuiTypography-root": {
+          fontSize: "18px",
+          fontWeight: 400,
+          color: Color.textBody,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        },
+      },
+
+      "&-daysHeader": {
+        height: "40px",
+        maxHeight: "unset",
+
+        "& .MuiPickersCalendarHeader-dayLabel": {
+          fontSize: "14px",
+          color: Color.grayDark,
+        },
       },
     },
 
-    "& .MuiPickersDay-day": {
-      margin: 0,
-      width: "40px",
-      height: "40px",
-      borderRadius: "4px",
+    "& .MuiPickersDay": {
+      "&-day": {
+        margin: 0,
+        width: "40px",
+        height: "40px",
+        borderRadius: 0,
+        fontSize: "18px",
+        color: Color.textBody,
 
-      "&:hover": {
-        backgroundColor: "#E1E4E8",
+        "&:hover": {
+          color: Color.textBody,
+          backgroundColor: Color.grayLight2,
+        },
       },
-    },
 
-    "& .MuiPickersDay-hidden": {
-      opacity: 1,
-      color: "#BDBDBD",
+      "&-current": {
+        color: Color.blue,
+      },
+
+      "&-daySelected": {
+        color: Color.white,
+        backgroundColor: Color.blue,
+      },
+
+      "&-dayDisabled": {
+        color: Color.gray3,
+      },
+
+      "&-hidden": {
+        opacity: 1,
+        color: Color.gray4,
+      },
     },
 
     "& .MuiPickersCalendar-transitionContainer": {
+      marginTop: "8px",
       minHeight: "240px",
       paddingBottom: "12px",
     },
@@ -171,65 +217,75 @@ const useStyles = makeStyles((theme: Theme) => ({
       flexDirection: "column",
       alignItems: "center",
 
-      "& .MuiPickersYear-root": {
-        margin: "8px 0",
-        padding: "8px 12px",
-        color: theme.palette.text.primary,
-        fontSize: "16px",
-        lineHeight: "16px",
-        fontWeight: 400,
-        borderRadius: "4px",
+      "& .MuiPickersYear": {
+        "&-root": {
+          margin: "4px 0",
+          padding: "4px 8px",
+          color: Color.textBody,
+          fontSize: "18px",
+          lineHeight: "24px",
+          fontWeight: 400,
+          borderRadius: 0,
 
-        "&:hover": {
-          backgroundColor: "#F0F2F3",
+          "&:hover": {
+            color: Color.textBody,
+            backgroundColor: Color.grayLight,
+          },
         },
-      },
 
-      "& .MuiPickersYear-yearSelected": {
-        fontSize: "20px",
-        lineHeight: "24px",
-        fontWeight: 600,
-        color: theme.palette.primary.main,
-        margin: "8px 0",
-        padding: "4px 8px",
+        "&-yearDisabled": {
+          color: Color.gray3,
+        },
+
+        "&-yearSelected": {
+          color: Color.blue,
+          fontWeight: 400,
+        },
       },
     },
 
     "& .MuiPickersMonthSelection-container": {
       width: "100%",
-      padding: "12px 0 24px",
+      padding: "0 0 24px",
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr",
       gridColumnGap: "0px",
       gridRowGap: "0px",
       justifyItems: "center",
 
-      "& .MuiPickersMonth-root": {
-        flex: "unset",
-        width: "42px",
-        height: "40px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "4px",
+      "& .MuiPickersMonth": {
+        "&-root": {
+          flex: "unset",
+          width: "45px",
+          height: "40px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 0,
 
-        color: theme.palette.text.primary,
-        fontSize: "16px",
-        fontWeight: 400,
+          color: Color.textBody,
+          fontSize: "18px",
+          fontWeight: 400,
 
-        "&:hover": {
-          backgroundColor: "#F0F2F3",
+          "&:hover": {
+            color: Color.textBody,
+            backgroundColor: Color.grayLight,
+          },
+        },
+
+        "&-monthDisabled": {
+          color: Color.gray3,
+        },
+
+        "&-monthSelected": {
+          color: Color.blue,
+          fontWeight: 400,
         },
       },
-
-      "& .MuiPickersMonth-monthSelected": {
-        fontSize: "20px",
-        fontWeight: 600,
-        color: theme.palette.primary.main,
-      },
     },
+
     "& .MuiPickersBasePicker-pickerView": {
       minHeight: "unset",
     },
   },
-}));
+});
