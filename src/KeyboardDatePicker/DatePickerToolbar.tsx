@@ -4,6 +4,8 @@ import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { Color } from "./styles";
+
 type DatePickerToolbarProps = ToolbarComponentProps & { message?: string };
 
 export const DatePickerToolbar: FC<DatePickerToolbarProps> = ({
@@ -47,13 +49,13 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    marginBottom: "8px",
+    marginBottom: "16px",
     padding: "8px 8px 0",
   },
   message: {
     padding: "8px",
     fontSize: "16px",
-    color: "#616569",
+    color: Color.grayDarker,
   },
   actions: {
     boxSizing: "border-box",
@@ -61,29 +63,33 @@ const useStyles = makeStyles({
     paddingTop: "8px",
     display: "flex",
     justifyContent: "space-between",
-    overflow: "auto",
   },
   action: {
     flexShrink: 0,
-    padding: "12px 8px",
+    padding: "8px 8px",
 
-    color: "#3A4CCC",
-    backgroundColor: "transparent",
+    outline: "none",
+    border: "none",
+    borderRadius: 0,
+
+    cursor: "pointer",
+
+    color: Color.blue,
+    backgroundColor: Color.transparent,
     "&:hover": {
-      backgroundColor: "#F0F2F3",
+      backgroundColor: Color.grayLight,
+    },
+    "&:active &:focus": {
+      color: Color.black,
     },
 
-    cursor: 'pointer',
-
-    border: 'none',
-    borderRadius: '4px',
-
-    fontWeight: 600,
+    fontWeight: 400,
     lineHeight: "24px",
-    fontSize: "20px",
+    fontSize: "18px",
     textTransform: "capitalize",
 
     "& + &": {
+      fontWeight: 600,
       marginLeft: "10px",
     },
   },

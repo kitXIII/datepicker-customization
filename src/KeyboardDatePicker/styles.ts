@@ -1,0 +1,17 @@
+export enum Color {
+    white = '#ffffff',
+    black = '#000000',
+    blue = '#1a73e9',
+    blueLight = '#498fed',
+    red = '#ee2737',
+    grayLight = '#ededed',
+    grayLight2 = '#e1e4e8',
+    grayDark = '#92979d',
+    grayDarker = '#616569',
+    gray3 = '#828282',
+    gray4 = '#bdbdbd',
+    gray5 = '#e0e0e0',
+    textBody = '#2b2b2b',
+    grayBackground = '#eeefef',
+    transparent = '#0000',
+}
