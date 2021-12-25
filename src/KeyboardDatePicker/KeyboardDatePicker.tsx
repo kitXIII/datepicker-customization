@@ -119,14 +119,12 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
             className: classes.input,
             placeholder,
           },
-          fullWidth: true,
         }}
         InputAdornmentProps={{
           className: classes.inputAdornment,
         }}
         KeyboardButtonProps={{
           className: classes.inputIcon,
-          size: "small",
           disableRipple: true,
         }}
         ToolbarComponent={ToolbarComponent}
@@ -413,13 +411,13 @@ const useStyles = makeStyles({
   popoverLeft: {
     "& .MuiPickersBasePicker-container::after": {
       display: "block",
-      left: "10px",
+      left: "14px",
     },
   },
   popoverRight: {
     "& .MuiPickersBasePicker-container::after": {
       display: "block",
-      right: "10px",
+      right: "14px",
     },
   },
   popoverCenter: {
