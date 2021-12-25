@@ -7,7 +7,7 @@ import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
 import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
 import React, { FC, ReactNode, useCallback, useRef } from "react";
-import cn from 'classnames';
+import cn from "classnames";
 
 import { DatePickerToolbar } from "./DatePickerToolbar";
 import { Color } from "./styles";
@@ -18,43 +18,24 @@ type DateIOType = MaterialUiPickersDate | null;
 
 type PopoverPosition = "left" | "center" | "right";
 
-const popoverPositionSettings: Record<
-  PopoverPosition,
-  {
-    anchorOrigin: PopoverOrigin;
-    transformOrigin: PopoverOrigin;
-  }
-> = {
-  left: {
+const getPopoverPositionSettings = (
+  position?: PopoverPosition
+): {
+  anchorOrigin: PopoverOrigin;
+  transformOrigin: PopoverOrigin;
+} | void => {
+  if (!position) return;
+
+  return {
     anchorOrigin: {
       vertical: "bottom",
-      horizontal: "left",
+      horizontal: position,
     },
     transformOrigin: {
       vertical: "top",
-      horizontal: "left",
+      horizontal: position,
     },
-  },
-  right: {
-    anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "right",
-    },
-    transformOrigin: {
-      vertical: "top",
-      horizontal: "right",
-    },
-  },
-  center: {
-    anchorOrigin: {
-      vertical: "bottom",
-      horizontal: "center",
-    },
-    transformOrigin: {
-      vertical: "top",
-      horizontal: "center",
-    },
-  },
+  };
 };
 
 export type KeyboardDatePickerProps = {
@@ -141,7 +122,7 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
             elevation: 0,
             square: true,
           },
-          ...(popoverPosition &&  popoverPositionSettings[popoverPosition]),
+          ...getPopoverPositionSettings(popoverPosition),
         }}
         fullWidth
       />
