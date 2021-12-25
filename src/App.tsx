@@ -21,17 +21,22 @@ export const App = () => {
             message="Hello world!"
             value={selectedDate1}
             onChange={handleDateChange1}
+            autoOk
+            placeholder="Text field"
+            popoverPosition="left"
           />
         </div>
         <div
           style={{
-            width: "312px",
+            width: "200px",
             marginLeft: "20px",
           }}
         >
           <KeyboardDatePicker
             value={selectedDate2}
             onChange={handleDateChange2}
+            placeholder="Text field"
+            popoverPosition="right"
           />
         </div>
       </div>

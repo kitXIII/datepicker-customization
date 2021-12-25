@@ -6,8 +6,8 @@ import {
 import { ParsableDate } from "@material-ui/pickers/constants/prop-types";
 import { ToolbarComponentProps } from "@material-ui/pickers/Picker/Picker";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
-import { isUndefined, omitBy } from "lodash";
-import React, { FC, ReactNode, useCallback, useMemo, useRef } from "react";
+import React, { FC, ReactNode, useCallback, useRef } from "react";
+import cn from 'classnames';
 
 import { DatePickerToolbar } from "./DatePickerToolbar";
 import { Color } from "./styles";
@@ -15,6 +15,47 @@ import { Color } from "./styles";
 const DatePickerViewOrder: DatePickerView[] = ["year", "month", "date"];
 
 type DateIOType = MaterialUiPickersDate | null;
+
+type PopoverPosition = "left" | "center" | "right";
+
+const popoverPositionSettings: Record<
+  PopoverPosition,
+  {
+    anchorOrigin: PopoverOrigin;
+    transformOrigin: PopoverOrigin;
+  }
+> = {
+  left: {
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "left",
+    },
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "left",
+    },
+  },
+  right: {
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "right",
+    },
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "right",
+    },
+  },
+  center: {
+    anchorOrigin: {
+      vertical: "bottom",
+      horizontal: "center",
+    },
+    transformOrigin: {
+      vertical: "top",
+      horizontal: "center",
+    },
+  },
+};
 
 export type KeyboardDatePickerProps = {
   value: ParsableDate;
@@ -31,23 +72,21 @@ export type KeyboardDatePickerProps = {
   disablePast?: boolean;
   shouldDisableDate?: (day: DateIOType) => boolean;
   invalidDateMessage?: ReactNode;
-  invalidLabel?: string;
   maxDate?: ParsableDate;
   maxDateMessage?: ReactNode;
   minDate?: ParsableDate;
   minDateMessage?: ReactNode;
   strictCompareDates?: boolean;
   readOnly?: boolean;
-  inputValue?: string;
-  popoverAnchorOrigin?: PopoverOrigin;
-  popoverTransformOrigin?: PopoverOrigin;
+  placeholder?: string;
+  popoverPosition?: PopoverPosition;
 };
 
 export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
   format = "YYYY-MM-DD",
   message,
-  popoverAnchorOrigin,
-  popoverTransformOrigin,
+  placeholder,
+  popoverPosition,
   ...restProps
 }) => {
   const ToolbarComponent = useCallback(
@@ -57,20 +96,14 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
     [message]
   );
 
-  const popoverOriginProps = useMemo(
-    () =>
-      omitBy(
-        {
-          anchorOrigin: popoverAnchorOrigin,
-          transformOrigin: popoverTransformOrigin,
-        },
-        isUndefined
-      ),
-    [popoverAnchorOrigin, popoverTransformOrigin]
-  );
-
   const classes = useStyles();
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const popoverClasses = cn(classes.popover, {
+    [classes.popoverLeft]: popoverPosition === "left",
+    [classes.popoverRight]: popoverPosition === "right",
+    [classes.popoverCenter]: popoverPosition === "center",
+  });
 
   return (
     <div className={classes.container} ref={containerRef}>
@@ -81,10 +114,18 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
         inputVariant="outlined"
         views={DatePickerViewOrder}
         InputProps={{
+          className: classes.inputWrapper,
+          inputProps: {
+            className: classes.input,
+            placeholder,
+          },
           fullWidth: true,
         }}
+        InputAdornmentProps={{
+          className: classes.inputAdornment,
+        }}
         KeyboardButtonProps={{
-          className: classes.inputIcon || undefined,
+          className: classes.inputIcon,
           size: "small",
           disableRipple: true,
         }}
@@ -96,14 +137,15 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
           disableRipple: true,
         }}
         PopoverProps={{
-          className: classes.popover,
+          className: popoverClasses,
           anchorEl: () => containerRef.current as Element,
           PaperProps: {
             elevation: 0,
             square: true,
           },
-          ...popoverOriginProps,
+          ...(popoverPosition &&  popoverPositionSettings[popoverPosition]),
         }}
+        fullWidth
       />
     </div>
   );
@@ -112,14 +154,94 @@ export const KeyboardDatePicker: FC<KeyboardDatePickerProps> = ({
 const useStyles = makeStyles({
   container: {
     width: "100%",
+
+    "& .MuiFormHelperText-root": {
+      margin: "8px 0 0",
+      fontWeight: "bold",
+      fontSize: "18px",
+      lineHeight: "25px",
+
+      "&.Mui-error": {
+        color: Color.red,
+      },
+    },
   },
   inputIcon: {
     borderRadius: 0,
+    width: "24px",
+    height: "24px",
+    padding: 0,
+    color: Color.blue,
+
+    "&:hover, &:focus": {
+      backgroundColor: Color.grayLight,
+    },
+
+    "&.MuiIconButton-root.Mui-disabled": {
+      color: Color.blue,
+    },
+  },
+  inputWrapper: {
+    borderRadius: 0,
+    padding: "11px 11px 11px 16px",
+    backgroundColor: Color.white,
+    color: Color.black,
+
+    "& fieldset": {
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderColor: Color.white,
+    },
+
+    "&.MuiOutlinedInput-root.Mui-focused fieldset": {
+      borderColor: Color.white,
+    },
+    "&.MuiOutlinedInput-root.Mui-error fieldset": {
+      borderColor: Color.white,
+    },
+    "&.MuiOutlinedInput-root:hover fieldset": {
+      borderColor: Color.white,
+    },
+
+    "&.MuiOutlinedInput-root.Mui-disabled": {
+      backgroundColor: Color.gray5,
+      color: Color.gray3,
+
+      "& fieldset": {
+        borderColor: Color.gray4,
+      },
+    },
+  },
+  input: {
+    height: "24px",
+    lineHeight: "24px",
+    fontSize: "18px",
+    padding: 0,
+  },
+  inputAdornment: {
+    marginLeft: "16px",
   },
   popover: {
     "& .MuiPopover-paper": {
+      marginTop: "10px",
       backgroundColor: Color.white,
       boxShadow: "0px 4px 24px rgba(0, 0, 0, 0.16)",
+      overflowY: "unset",
+      overflowX: "unset",
+    },
+
+    "& .MuiPickersBasePicker-container": {
+      position: "relative",
+
+      "&::after": {
+        content: "''",
+        position: "absolute",
+        display: "none",
+        top: "-18px",
+        border: "10px solid transparent",
+        borderBottomColor: Color.white,
+        zIndex: 1400,
+      },
     },
 
     "& .MuiPickersCalendarHeader": {
@@ -286,6 +408,25 @@ const useStyles = makeStyles({
 
     "& .MuiPickersBasePicker-pickerView": {
       minHeight: "unset",
+    },
+  },
+  popoverLeft: {
+    "& .MuiPickersBasePicker-container::after": {
+      display: "block",
+      left: "10px",
+    },
+  },
+  popoverRight: {
+    "& .MuiPickersBasePicker-container::after": {
+      display: "block",
+      right: "10px",
+    },
+  },
+  popoverCenter: {
+    "& .MuiPickersBasePicker-container::after": {
+      display: "block",
+      left: "50%",
+      transform: "translateX(-50%)",
     },
   },
 });
